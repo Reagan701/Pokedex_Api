@@ -1,18 +1,29 @@
+// Container used for appending rows to the HTML
 let container = document.getElementById("mainContainer");
+
+// Number of pokémon fetched from the API
 let numberOfFetchedPokémon = 15;
 
+// Function to fetch pokédex information
 async function fetchData(){
+    // Fetches the results from the API and converts it to JSON
     let result = await fetch('https://pokeapi.co/api/v2/pokedex/2/');
     let data = await result.json();
+
+    // Initializes pokémon array
     let pokemon = [];
+
+    // Loops through the requested number of pokémon and fetches more detailed information
     for(let i = 0; i <numberOfFetchedPokémon;i++){
         let pokemondata = await fetch(data.pokemon_entries[i].pokemon_species.url);
         let pData = await pokemondata.json();
+        // Adds to the pokemon array
         pokemon.push(pData);
     }
     return pokemon
 }
 
+// Function to fetch pokémon specific information
 async function fetchPokéData(){
     let result = await fetch('https://pokeapi.co/api/v2/pokemon/');
     let data = await result.json();
@@ -25,17 +36,22 @@ async function fetchPokéData(){
     return pokemon;
 }
 
+// Function that creates rows and displays information in cards, in columns, in the rows
 async function display(){
+    // Calls the functions the already fetched information
     let newPokemon = await fetchData();
     let pokeInfo = await fetchPokéData();
-    console.log(newPokemon);
-    console.log(pokeInfo);
+
+    // Loop that creates rows per 3 pokemon requested, starting from zero. Math.ceil() returns the next highest integer
     for(let i = 0; i < Math.ceil(newPokemon.length/3); i++){
+        // Creates div and applies the appropriate ID and classes
         let newRow = document.createElement('div');
         newRow.className = "row my-5";
         newRow.id = i; 
         container.appendChild(newRow);
     }
+
+    // Loop that loops through and displays all pokémon information and every 3 pokémon it places the information on a new row
     for(let i = 0; i < newPokemon.length;i++){
         if(i<3){
             container = document.getElementById('0');
@@ -126,6 +142,7 @@ async function display(){
     }
 }
 
+// Calls the functions
 fetchData();
 fetchPokéData();
 display();

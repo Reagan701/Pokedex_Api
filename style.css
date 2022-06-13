@@ -27,11 +27,14 @@ body{
     background-color: yellow;
 }
 
+/* Sets P tag height to 6rem for 330px and below */
+
 @media screen and (max-width:330px) {
     p{
         height: 6rem !important;
     }
 }
+/* Sets P tag height to 4rem for 331px and above */
 @media screen and (min-width:331px) {
     p{
         height: 4rem !important;
