@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Kdam+Thmor+Pro&display=swap');
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+    font-family: 'Kdam Thmor Pro',sans-serif;
+}
+
+h1{
+    color: yellow;
+}
+
+body{
+    background-color: darkblue;
+}
+#cardBody{
+    background-color: red !important;
+}
+
+#border{
+    border: 5px solid rgba(0, 4, 255, 0.6) !important;
+}
+
+#cardImage{
+    background-color: yellow;
+}
+
+@media screen and (max-width:330px) {
+    p{
+        height: 6rem !important;
+    }
+}
+@media screen and (min-width:331px) {
+    p{
+        height: 4rem !important;
+    }
+}
+
