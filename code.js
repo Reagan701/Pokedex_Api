@@ -2,7 +2,7 @@
 let container = document.getElementById("mainContainer");
 
 // Number of pokémon fetched from the API
-let numberOfFetchedPokémon = 15;
+let numberOfFetchedPokémon = 30;
 
 // Function to fetch pokédex information
 async function fetchData(){
@@ -23,9 +23,22 @@ async function fetchData(){
     return pokemon
 }
 
+async function fetchTypes(){
+    let result = await fetch('https://pokeapi.co/api/v2/type');
+    let data = await result.json();
+
+    let types = [];
+
+    for(let i = 0;i<data.count;i++){
+        let typeData = data.results[i].name;
+        types.push(typeData);
+    }
+    return types;
+}
+
 // Function to fetch pokémon specific information
 async function fetchPokéData(){
-    let result = await fetch('https://pokeapi.co/api/v2/pokemon/');
+    let result = await fetch('https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0');
     let data = await result.json();
     let pokemon = [];
     for(let i = 0; i <numberOfFetchedPokémon;i++){
@@ -36,9 +49,55 @@ async function fetchPokéData(){
     return pokemon;
 }
 
+function CreatePokémonHTML(newPokemon,pokeInfo,index,currentIteration,typeData){
+    container = document.getElementById(index);
+            container.innerHTML +=
+            `<div class="col-md-4">
+                <div id="border" class="card w-100">
+                    <img id="cardImage" class="img-fluid" src="${pokeInfo[currentIteration].sprites.front_default}" alt="">
+                    <div id="cardBody" class="text-white card-body">
+                    <h5 class="card-title"> ${newPokemon[currentIteration].name.charAt(0).toUpperCase() + newPokemon[currentIteration].name.substring(1)} </h5>
+                    <ul class="list-unstyled">
+                            <li> Weight: ${pokeInfo[currentIteration].weight} </li>
+                            <li> Height: ${pokeInfo[currentIteration].height} </li>
+                            <li> Type: <button class="btn" id="" >${pokeInfo[currentIteration].types[0].type.name.charAt(0).toUpperCase() + pokeInfo[currentIteration].types[0].type.name.substring(1)} </button> </li>
+                        </ul>
+                        <p class="card-text">${newPokemon[currentIteration].flavor_text_entries[1].flavor_text}</p>
+                    </div>
+                </div>
+            </div>`;
+}
+
+function convertTo(ar){
+    let object = {};
+    for(let i = 0; i<ar.length;i++){
+        let key = ar[0][i];
+        let value = ar[1][i];
+        object[key] = value;
+    }
+    return object;
+}
+
+function convertTo2D(array1,array2){
+    let i = -1;
+    let result = [];
+    while(array1[++i]){
+        result.push([array1[i],array2[i]])
+    }
+    return result;
+}
+
+// let types = fetchTypes();
+// let colors = ["darkolivegreen",'brown','royalblue', 'yellow', 'pink', 'darkred','red','lightseagreen','darkblue', 'green', 'goldenrod', 'cyan', 'silver','purple','magenta','gray','blue'
+// ];
+
+// let conversion = convertTo2D(types,colors);
+// let newArray = convertTo(conversion);
+
 // Function that creates rows and displays information in cards, in columns, in the rows
 async function display(){
     // Calls the functions the already fetched information
+    let typeData = await fetchTypes()
     let newPokemon = await fetchData();
     let pokeInfo = await fetchPokéData();
 
@@ -47,102 +106,56 @@ async function display(){
         // Creates div and applies the appropriate ID and classes
         let newRow = document.createElement('div');
         newRow.className = "row my-5";
-        newRow.id = i; 
+        newRow.id = i;
         container.appendChild(newRow);
     }
+    let currentIteration;
 
-    // Loop that loops through and displays all pokémon information and every 3 pokémon it places the information on a new row
     for(let i = 0; i < newPokemon.length;i++){
-        if(i<3){
-            container = document.getElementById('0');
-            container.innerHTML +=
-            `<div class="col-md-4">
-                <div id="border" class="card w-100">
-                    <img id="cardImage" class="img-fluid" src="${pokeInfo[i].sprites.front_default}" alt="">
-                    <div id="cardBody" class="text-white card-body">
-                    <h5 class="card-title"> ${newPokemon[i].name.charAt(0).toUpperCase() + newPokemon[i].name.substring(1)} </h5>
-                        <ul class="list-unstyled">
-                            <li> Weight: ${pokeInfo[i].weight} </li>
-                            <li> Height: ${pokeInfo[i].height} </li>
-                            <li> Type: ${pokeInfo[i].types[0].type.name.charAt(0).toUpperCase() + pokeInfo[i].types[0].type.name.substring(1)} </li>
-                        </ul>
-                        <p class="card-text">${newPokemon[i].flavor_text_entries[1].flavor_text}</p>
-                    </div>
-                </div>
-            </div>`
-        }else if(i>=3 && i<6){
-            container = document.getElementById('1');
-            container.innerHTML +=
-            `<div class="col-md-4">
-            <div id="border" class="card w-100">
-                <img id="cardImage" class="img-fluid" src="${pokeInfo[i].sprites.front_default}" alt="">
-                <div id="cardBody" class="text-white card-body">
-                <h5 class="card-title"> ${newPokemon[i].name.charAt(0).toUpperCase() + newPokemon[i].name.substring(1)} </h5>
-                    <ul class="list-unstyled">
-                        <li> Weight: ${pokeInfo[i].weight} </li>
-                        <li> Height: ${pokeInfo[i].height} </li>
-                        <li> Type: ${pokeInfo[i].types[0].type.name.charAt(0).toUpperCase() + pokeInfo[i].types[0].type.name.substring(1)} </li>
-                    </ul>
-                    <p class="card-text">${newPokemon[i].flavor_text_entries[1].flavor_text}</p>
-                </div>
-            </div>
-        </div>`
-        }else if(i>=6 && i<9){
-            container = document.getElementById('2');
-            container.innerHTML +=
-            `<div class="col-md-4">
-            <div id="border" class="card w-100">
-                <img id="cardImage" class="img-fluid" src="${pokeInfo[i].sprites.front_default}" alt="">
-                <div id="cardBody" class="text-white card-body">
-                <h5 class="card-title"> ${newPokemon[i].name.charAt(0).toUpperCase() + newPokemon[i].name.substring(1)} </h5>
-                    <ul class="list-unstyled">
-                        <li> Weight: ${pokeInfo[i].weight} </li>
-                        <li> Height: ${pokeInfo[i].height} </li>
-                        <li> Type: ${pokeInfo[i].types[0].type.name.charAt(0).toUpperCase() + pokeInfo[i].types[0].type.name.substring(1)} </li>
-                    </ul>
-                    <p class="card-text">${newPokemon[i].flavor_text_entries[1].flavor_text}</p>
-                </div>
-            </div>
-        </div>`
-        }else if(i>=9 && i<12){
-            container = document.getElementById('3');
-            container.innerHTML +=
-            `<div class="col-md-4">
-            <div id="border" class="card w-100">
-                <img id="cardImage" class="img-fluid" src="${pokeInfo[i].sprites.front_default}" alt="">
-                <div id="cardBody" class="text-white card-body">
-                <h5 class="card-title"> ${newPokemon[i].name.charAt(0).toUpperCase() + newPokemon[i].name.substring(1)} </h5>
-                    <ul class="list-unstyled">
-                        <li> Weight: ${pokeInfo[i].weight} </li>
-                        <li> Height: ${pokeInfo[i].height} </li>
-                        <li> Type: ${pokeInfo[i].types[0].type.name.charAt(0).toUpperCase() + pokeInfo[i].types[0].type.name.substring(1)} </li>
-                    </ul>
-                    <p class="card-text">${newPokemon[i].flavor_text_entries[1].flavor_text}</p>
-                </div>
-            </div>
-        </div>`
-        }else if(i>=12 && i<15){
-            container = document.getElementById('4');
-            container.innerHTML +=
-            `<div class="col-md-4">
-            <div id="border" class="card w-100">
-                <img id="cardImage" class="img-fluid" src="${pokeInfo[i].sprites.front_default}" alt="">
-                <div id="cardBody" class="text-white card-body">
-                <h5 class="card-title"> ${newPokemon[i].name.charAt(0).toUpperCase() + newPokemon[i].name.substring(1)} </h5>
-                    <ul class="list-unstyled">
-                        <li> Weight: ${pokeInfo[i].weight} </li>
-                        <li> Height: ${pokeInfo[i].height} </li>
-                        <li> Type: ${pokeInfo[i].types[0].type.name.charAt(0).toUpperCase() + pokeInfo[i].types[0].type.name.substring(1)} </li>
-                    </ul>
-                    <p class="card-text">${newPokemon[i].flavor_text_entries[1].flavor_text}</p>
-                </div>
-            </div>
-        </div>`
+        switch(true){
+            case (i<3):
+                currentIteration =i;
+                CreatePokémonHTML(newPokemon,pokeInfo,0,currentIteration,typeData);
+            break;
+            case(i>=3 && i<6):
+                currentIteration = i;
+                CreatePokémonHTML(newPokemon,pokeInfo,1,currentIteration,typeData);
+            break;
+            case(i>=6 && i<9):
+            currentIteration = i;
+                CreatePokémonHTML(newPokemon,pokeInfo,2,currentIteration,typeData);
+            break;
+            case(i>=9 && i<12):
+                currentIteration = i;
+                CreatePokémonHTML(newPokemon,pokeInfo,3,currentIteration),typeData;
+            break;
+            case(i>=12 && i<15):
+            currentIteration = i;
+                CreatePokémonHTML(newPokemon,pokeInfo,4,currentIteration,typeData);
+            break;
+            case(i>=15 && i<18):
+            currentIteration = i;
+                CreatePokémonHTML(newPokemon,pokeInfo,5,currentIteration,typeData);
+            break;
+            case(i>=18 && i<21):
+            currentIteration = i;
+                CreatePokémonHTML(newPokemon,pokeInfo,6,currentIteration,typeData);
+            break;
+            case(i>=21 && i<24):
+            currentIteration = i;
+                CreatePokémonHTML(newPokemon,pokeInfo,7,currentIteration,typeData);
+            break;
+            case(i>=24 && i<27):
+            currentIteration = i;
+                CreatePokémonHTML(newPokemon,pokeInfo,8,currentIteration,typeData);
+            break;
+            case(i>=27 && i<30):
+            currentIteration = i;
+                CreatePokémonHTML(newPokemon,pokeInfo,9,currentIteration,typeData);
+            break;
         }
     }
 }
 
-// Calls the functions
-fetchData();
-fetchPokéData();
+// Calls the function
 display();

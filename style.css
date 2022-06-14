@@ -34,10 +34,15 @@ body{
         height: 6rem !important;
     }
 }
-/* Sets P tag height to 4rem for 331px and above */
-@media screen and (min-width:331px) {
+/* Sets P tag height to 8rem for 331px to 1200px */
+@media screen and (min-width:331px) and (max-width:1200px) {
     p{
-        height: 4rem !important;
+        height: 8rem !important;
     }
 }
 
+@media screen and (min-width:1201px) {
+    p{
+        height: 6rem !important;
+    }
+}
