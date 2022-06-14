@@ -9,14 +9,14 @@
 }
 
 h1{
-    color: yellow;
+    color: rgb(216, 216, 0);
 }
 
 body{
     background-color: darkblue;
 }
 #cardBody{
-    background-color: red !important;
+    background-color: rgb(214, 0, 0) !important;
 }
 
 #border{
@@ -24,7 +24,7 @@ body{
 }
 
 #cardImage{
-    background-color: yellow;
+    background-color: rgb(216, 216, 0);
 }
 
 /* Sets P tag height to 6rem for 330px and below */
